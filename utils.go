@@ -89,14 +89,14 @@ func decrypt(key []byte, cryptoText string) string {
 }
 
 
-	const spaces ="1234567890123456789012345678901212345678901234567890123456789012"
+	const spaces ="12345678901234567890123456789012"
 func get64key(key string) string {
 	keyLen := len(key)
 	switch  {
-	case keyLen >64 :
-		return key[0:64]
-	case keyLen <64:
-		return key + spaces[0:64-keyLen]
+	case keyLen >32 :
+		return key[0:32]
+	case keyLen <32:
+		return key + spaces[0:32-keyLen]
 	default:
 		return key
 	}
