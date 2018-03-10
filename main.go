@@ -18,7 +18,7 @@ func main() {
 	http.HandleFunc("/saveSecret", saveSecretHandler)
 	http.HandleFunc("/view/", viewHandler)
 	http.HandleFunc("/api/", apiHandler)
-	http.HandleFunc("/ico.png", icoHandler)
+	//http.HandleFunc("/ico.png", icoHandler)
 
 	log.Fatal(http.ListenAndServe("127.0.0.1:8080", nil))
 }
