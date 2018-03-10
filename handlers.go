@@ -7,7 +7,6 @@ import (
 	"log"
 	"time"
 	"strconv"
-	"io/ioutil"
 )
 
 type StoredMessage struct {
@@ -65,10 +64,9 @@ func saveSecretHandler(w http.ResponseWriter, r *http.Request) {
 	linkKey := RandStringBytesMaskImprSrc(secretKeyLen)
 	err := saveToStorage(linkKey, value, time.Second*duration)
 	if err != nil {
-		showError(500,"Storage error",w)
+		showError(500, "Storage error", w)
 		return
 	}
-
 
 	t, err := template.ParseFiles("templates/result.html")
 	if err != nil {
@@ -173,6 +171,7 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(responseCode)
 	w.Write(jval)
 }
+
 //func icoHandler (w http.ResponseWriter, r *http.Request) {
 //
 //	body, _:= ioutil.ReadFile("ico/favicon-1024.png")
