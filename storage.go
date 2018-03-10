@@ -7,11 +7,12 @@ import (
 	"os"
 )
 
-var redisPassword = os.Getenv("REDISPASSWORD")
+var redisPassword = os.Getenv("REDISPASS")
+var redisHost = os.Getenv("REDISHOST")
 
 func getRedisClient() *redis.Client {
 	return redis.NewClient(&redis.Options{
-		Addr:     "redis-17267.c14.us-east-1-2.ec2.cloud.redislabs.com:17267",
+		Addr:     redisHost,
 		Password: redisPassword,//"buNSG1vfIIrLyT7LyGnesywdoijtyddo",
 		DB:       0,
 	})
