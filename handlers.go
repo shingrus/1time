@@ -45,7 +45,7 @@ func saveSecretHandler(w http.ResponseWriter, r *http.Request) {
 		t, _ := strconv.Atoi(d)
 		duration = time.Second * time.Duration(t)
 	}
-	if duration == 0 || duration > 86400 {
+	if duration <= 0 || duration > 86400 {
 		duration = defaultDuration * time.Second
 	}
 
@@ -53,7 +53,7 @@ func saveSecretHandler(w http.ResponseWriter, r *http.Request) {
 
 	//encrypt
 	if secretkey != "" {
-		newkey := get32key(secretkey)
+		newkey := get64key(secretkey)
 		newMessage.Message = encrypt([]byte(newkey), secretkey+secretMessage)
 		newMessage.Encrypted = true
 	} else {
@@ -121,7 +121,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 				//log.Printf("Geg key: %v, %v", key,r.URL.Path)
 
 				if storedMessage.Encrypted {
-					newKey := get32key(secretKey)
+					newKey := get64key(secretKey)
 					keylen := len(secretKey)
 					secretMessage := decrypt([]byte(newKey), storedMessage.Message)
 					if len(secretMessage) > keylen && secretMessage[0:keylen] == secretKey {
@@ -161,13 +161,6 @@ func showError(errorStatus int, text string, w http.ResponseWriter) {
 	w.Write([]byte(text))
 }
 
-func icoHandler (w http.ResponseWriter, r *http.Request) {
-
-	body, _:= ioutil.ReadFile("ico/favicon-1024.png")
-	w.Write(body)
-
-
-}
 func apiHandler(w http.ResponseWriter, r *http.Request) {
 	responseCode := 501
 	val := struct {
@@ -180,3 +173,10 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(responseCode)
 	w.Write(jval)
 }
+//func icoHandler (w http.ResponseWriter, r *http.Request) {
+//
+//	body, _:= ioutil.ReadFile("ico/favicon-1024.png")
+//	w.Write(body)
+//
+//
+//}
