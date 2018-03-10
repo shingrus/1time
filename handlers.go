@@ -84,7 +84,7 @@ func saveSecretHandler(w http.ResponseWriter, r *http.Request) {
 func viewHandler(w http.ResponseWriter, r *http.Request) {
 	key := r.URL.Path[len("/view/"):]
 	if len(key) == 0 || len(key) > secretKeyLen {
-		log.Printf("Invalid view key: %v", key)
+		log.Printf("Invalid  secretKey: %v", key)
 		return
 	}
 
@@ -117,10 +117,15 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 				r.ParseForm()
 				secretKey := r.Form.Get(secretKeyFieldName)
 				//log.Printf("Geg key: %v, %v", key,r.URL.Path)
+				keylen := len(secretKey)
+				if keylen == 0 {
+					http.Redirect(w, r, "/view/"+key, http.StatusSeeOther)
+					return
+				}
 
 				if storedMessage.Encrypted {
 					newKey := get64key(secretKey)
-					keylen := len(secretKey)
+
 					secretMessage := decrypt([]byte(newKey), storedMessage.Message)
 					if len(secretMessage) > keylen && secretMessage[0:keylen] == secretKey {
 						storedMessage.Message = secretMessage[keylen:]
