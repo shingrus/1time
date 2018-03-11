@@ -6,7 +6,7 @@ import (
 )
 
 const defaultDuration = 600 //seconds
-const secretKeyLen = 6
+const randKeyLen = 6
 
 const secretMessageFieldName = "secretMessage"
 const secretKeyFieldName = "secretKey"

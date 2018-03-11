@@ -38,7 +38,10 @@ func saveSecretHandler(w http.ResponseWriter, r *http.Request) {
 	if len(secretMessage) > secretMessageMaxLen {
 		secretMessage = secretMessage[0:secretMessageMaxLen]
 	}
+
 	secretkey := r.Form.Get(secretKeyFieldName)
+	randKey := RandStringBytesMaskImprSrc(randKeyLen)
+
 	var duration time.Duration
 	if d := r.Form.Get("duration"); d != "" {
 		t, _ := strconv.Atoi(d)
@@ -48,21 +51,21 @@ func saveSecretHandler(w http.ResponseWriter, r *http.Request) {
 		duration = defaultDuration * time.Second
 	}
 
+	encryptKey:= secretkey+randKey
+
 	var newMessage StoredMessage
 
 	//encrypt
-	if secretkey != "" {
-		newkey := get64key(secretkey)
-		newMessage.Message = encrypt([]byte(newkey), secretkey+secretMessage)
-		newMessage.Encrypted = true
-	} else {
-		newMessage.Message = secretMessage
-	}
+
+	newkey := get64key(encryptKey)
+	newMessage.Message = encrypt([]byte(newkey), encryptKey+secretMessage)
+	newMessage.Encrypted = true
+
 
 	value, _ := json.Marshal(newMessage)
 	//store to storage
-	linkKey := RandStringBytesMaskImprSrc(secretKeyLen)
-	err := saveToStorage(linkKey, value, time.Second*duration)
+
+	storeKey, err := saveToStorage(value, time.Second*duration)
 	if err != nil {
 		showError(500, "Storage error", w)
 		return
@@ -72,6 +75,7 @@ func saveSecretHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panic(err)
 	}
+	linkKey :=randKey + storeKey
 
 	data := struct {
 		OneTimeLink string
@@ -83,12 +87,13 @@ func saveSecretHandler(w http.ResponseWriter, r *http.Request) {
 
 func viewHandler(w http.ResponseWriter, r *http.Request) {
 	key := r.URL.Path[len("/view/"):]
-	if len(key) == 0 || len(key) > secretKeyLen {
+	if len(key) <= randKeyLen {
 		log.Printf("Invalid  secretKey: %v", key)
 		return
 	}
-
-	val := getFromStorage(key)
+	randKey := key[:randKeyLen]
+	storeKey := key[randKeyLen:]
+	val := getMessageFromStorage(storeKey)
 	if len(val) > 0 {
 
 		var storedMessage StoredMessage
@@ -116,18 +121,19 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 			} else {
 				r.ParseForm()
 				secretKey := r.Form.Get(secretKeyFieldName)
-				//log.Printf("Geg key: %v, %v", key,r.URL.Path)
-				keylen := len(secretKey)
+				encryptKey := secretKey + randKey
+
+				keylen := len(encryptKey)
 				if keylen == 0 {
 					http.Redirect(w, r, "/view/"+key, http.StatusSeeOther)
 					return
 				}
 
 				if storedMessage.Encrypted {
-					newKey := get64key(secretKey)
+					newKey := get64key(encryptKey)
 
 					secretMessage := decrypt([]byte(newKey), storedMessage.Message)
-					if len(secretMessage) > keylen && secretMessage[0:keylen] == secretKey {
+					if len(secretMessage) > keylen && secretMessage[0:keylen] == encryptKey {
 						storedMessage.Message = secretMessage[keylen:]
 						showMessage(key, storedMessage, w)
 						return
