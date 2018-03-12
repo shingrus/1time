@@ -4,9 +4,15 @@ body {
     font-family: "Open Sans", sans-serif;
     font-size: 16px;
     color: #333;
-    align: center;
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: "PT Serif", serif;
+}
+
+div.logocentered {
+    width: 72px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
