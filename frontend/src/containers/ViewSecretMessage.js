@@ -32,7 +32,7 @@ export default class ViewSecretMessage extends React.Component {
         let link = arr[4];
 
         if (typeof(link) !== "undefined" && link.length > Constants.randomKeyLen) {
-            let apiBaseUrl = "http://localhost:8080/api/";
+
             let randomKey = link.substring(0, Constants.randomKeyLen);
             let id = link.substring(Constants.randomKeyLen);
             let secretKey = this.state.secretKey + randomKey;
@@ -42,7 +42,7 @@ export default class ViewSecretMessage extends React.Component {
                 hashedKey: hashedKey
             };
             console.log(payload);
-            axios.post(apiBaseUrl + 'get', payload)
+            axios.post(Constants.apiBaseUrl + 'get', payload)
                 .then(function (response) {
                     if (response.data.status === "ok" &&
                         typeof (response.data.cryptedMessage) !== "undefined" &&
