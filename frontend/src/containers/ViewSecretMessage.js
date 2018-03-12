@@ -4,6 +4,8 @@ import axios from 'axios/index';
 import CryptoJS from 'crypto-js'
 import {Constants} from '../utils/util';
 
+import "./NewMessage.css";
+
 
 export default class ViewSecretMessage extends React.Component {
     constructor(props) {
@@ -83,7 +85,7 @@ export default class ViewSecretMessage extends React.Component {
 
     render() {
         return (
-            <div className="NewMessage">
+            <div className="Center">
                 <form onSubmit={this.handleSubmit}>
                     {this.state.secretMessage.length === 0 &&
                     <FormGroup controlId="secretKey" bsSize="large">

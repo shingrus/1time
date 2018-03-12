@@ -3,8 +3,8 @@
         padding: 60px 0;
     }
 
-    .NewMessage form {
+    .Center {
         margin: 0 auto;
-        max-width: 520px;
+        max-width: 600px;
     }
 }

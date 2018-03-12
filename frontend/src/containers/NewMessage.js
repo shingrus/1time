@@ -35,8 +35,6 @@ export default class NewMessage extends Component {
         this.setState({isLoading: true}); //block button
         let _this = this;
 
-
-        let apiBaseUrl = "http://localhost:8080/api/";
         let randomKey = getRandomString(Constants.randomKeyLen);
         let secretMessage =  this.state.secretMessage;
 
@@ -55,7 +53,7 @@ export default class NewMessage extends Component {
             hashedKey: hashedKey.toString(),
         };
         console.log("payload:" + hashedKey);
-        axios.post(apiBaseUrl + 'saveSecret', payload)
+        axios.post(Constants.apiBaseUrl + 'saveSecret', payload)
             .then(function (response) {
                 console.log(response);
                 if (response.data.status === "ok") {
@@ -89,7 +87,7 @@ export default class NewMessage extends Component {
 
     render() {
         return (
-            <div className="NewMessage">
+            <div className="Center">
                 <form onSubmit={this.handleSubmit}>
                     <FormGroup controlId="secretMessage" bsSize="large">
                         <ControlLabel>One-time Message</ControlLabel>

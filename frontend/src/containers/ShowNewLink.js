@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {FormGroup, Button, InputGroup, FormControl} from 'react-bootstrap';
 
+import "./NewMessage.css";
+
 export default class ShowNewLink extends Component {
     constructor(props) {
         super(props);
@@ -37,15 +39,10 @@ export default class ShowNewLink extends Component {
     render() {
         return (
 
-            <div>
-                <p>
-                    One-Time Message has been seaved.
-                    Now you can share this one-time link:
-                </p>
+            <div className="Center">
                 <FormGroup>
                     <InputGroup>
-
-                        <InputGroup.Addon>Secret link: </InputGroup.Addon>
+                        <InputGroup.Addon>Secret one-time link: </InputGroup.Addon>
                         <FormControl type="text" value={this.state.newLink} inputRef={input => this.textInput = input}
                                      readOnly/>
                     </InputGroup>
