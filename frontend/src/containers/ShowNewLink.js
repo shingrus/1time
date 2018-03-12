@@ -7,10 +7,12 @@ export default class ShowNewLink extends Component {
         this.state = {
             newLink: "",
             copied: false
-        }
-        if (typeof(props.location) !== "undefined" && typeof(props.location.state) !== "undefined" && typeof(props.location.state.newLink) !== "undefined") {
-            //do something
-            this.state.newLink = props.location.state.newLink;
+        };
+        if (typeof(props.location) !== "undefined" && typeof(props.location.state) !== "undefined" && typeof(props.location.state.randomString) !== "undefined") {
+
+            let arr = window.location.href.split("/");
+            let host = arr[0] + "//" + arr[2];
+            this.state.newLink =  host + "/v/" +  props.location.state.randomString + props.location.state.newId;
         }
 
         console.log("load show new link: " + this.state.newLink)
@@ -18,21 +20,19 @@ export default class ShowNewLink extends Component {
 
     copyLink = () => {
 
-        this.textInput.select()
+        this.textInput.select();
         try {
-            successful = document.execCommand('copy');
+            let successful = document.execCommand('copy');
             if (successful) {
                 this.setState({copied: true})
             }
-
-
 
         } catch (err) {
             console.log('Oops, unable to copy');
         }
 
 
-    }
+    };
 
     render() {
         return (
