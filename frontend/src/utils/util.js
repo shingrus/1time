@@ -1,11 +1,4 @@
-
-var isProduction = false
-if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-    isProduction = false
-} else {
-    isProduction = true
-}
-export var Constants = {
+    export var Constants = {
     randomKeyLen:6,
     apiBaseUrl: process.env.NODE_ENV === 'development'? "http://localhost:8080/api/" : "http://1time.click/api/"
 };
