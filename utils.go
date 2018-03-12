@@ -38,7 +38,6 @@ func RandStringBytesMaskImprSrc(n int) string {
 	return string(b)
 }
 
-
 func encrypt(key []byte, text string) string {
 	// key := []byte(keyText)
 	plaintext := []byte(text)
@@ -88,14 +87,14 @@ func decrypt(key []byte, cryptoText string) string {
 	return fmt.Sprintf("%s", ciphertext)
 }
 
+const spaces = "12345678901234567890123456789012"
 
-	const spaces ="12345678901234567890123456789012"
-func get64key(key string) string {
+func get32key(key string) string {
 	keyLen := len(key)
-	switch  {
-	case keyLen >32 :
+	switch {
+	case keyLen > 32:
 		return key[0:32]
-	case keyLen <32:
+	case keyLen < 32:
 		return key + spaces[0:32-keyLen]
 	default:
 		return key

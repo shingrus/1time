@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-const defaultDuration = 600 //seconds
+const defaultDuration = 86400*7 //keep for 1 week
 const randKeyLen = 6
 
 const secretMessageFieldName = "secretMessage"

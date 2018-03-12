@@ -10,8 +10,9 @@ import (
 )
 
 type StoredMessage struct {
-	Encrypted bool   `json:"encrypted"`
+	Encrypted bool   `json:"encrypted"` //obsolete all messages are encrypted
 	Message   string `json:"message"`
+	HashedKey string `json:"hashedKey"`
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -51,16 +52,15 @@ func saveSecretHandler(w http.ResponseWriter, r *http.Request) {
 		duration = defaultDuration * time.Second
 	}
 
-	encryptKey:= secretkey+randKey
+	encryptKey := secretkey + randKey
 
 	var newMessage StoredMessage
 
 	//encrypt
 
-	newkey := get64key(encryptKey)
+	newkey := get32key(encryptKey)
 	newMessage.Message = encrypt([]byte(newkey), encryptKey+secretMessage)
 	newMessage.Encrypted = true
-
 
 	value, _ := json.Marshal(newMessage)
 	//store to storage
@@ -75,7 +75,7 @@ func saveSecretHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panic(err)
 	}
-	linkKey :=randKey + storeKey
+	linkKey := randKey + storeKey
 
 	data := struct {
 		OneTimeLink string
@@ -130,7 +130,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if storedMessage.Encrypted {
-					newKey := get64key(encryptKey)
+					newKey := get32key(encryptKey)
 
 					secretMessage := decrypt([]byte(newKey), storedMessage.Message)
 					if len(secretMessage) > keylen && secretMessage[0:keylen] == encryptKey {
@@ -170,17 +170,130 @@ func showError(errorStatus int, text string, w http.ResponseWriter) {
 	w.Write([]byte(text))
 }
 
-func apiHandler(w http.ResponseWriter, r *http.Request) {
-	responseCode := 501
-	val := struct {
-		Code        int    `json:"code"`
-		Description string `json:"description"`
-	}{responseCode, "Not implemented yet"}
-	jval, _ := json.Marshal(val)
+func apiSaveSecret(r *http.Request) (responseCode int, response []byte) {
+	responseCode = 200
 
+	jResponse := struct {
+		Status string `json:"status"`
+		NewId  string `json:"newId"`
+	}{
+		Status: "error",
+		//NewId:strconv.FormatInt(32, 16)
+		NewId: "0",
+	}
+
+	var payload struct {
+		SecretMessage string `json:"secretMessage"`
+		HashedKey     string `json:"hashedKey"`
+	}
+	dec := json.NewDecoder(r.Body)
+
+	if dec.More() {
+		err := dec.Decode(&payload)
+		if err == nil {
+			if len(payload.SecretMessage) > 0 {
+
+				newMessage := StoredMessage{
+					Encrypted: true,
+					Message:   payload.SecretMessage,
+					HashedKey: payload.HashedKey,
+				}
+
+				log.Printf("Got payllaod: %v, Hashedkey: %v\n", payload.SecretMessage, payload.HashedKey)
+				valueToStore, _ := json.Marshal(newMessage)
+				storeKey, err := saveToStorage(valueToStore, defaultDuration*time.Second)
+				if err == nil {
+					jResponse.NewId = storeKey
+					jResponse.Status = "ok"
+				} else {
+					log.Println(err)
+				}
+
+			}
+		} else {
+			log.Println(err)
+		}
+		log.Printf("Got payload: %v\n", payload)
+	}
+	response, _ = json.Marshal(jResponse)
+	return
+}
+
+func apiGetMessage(r *http.Request) (responseCode int, response []byte) {
+	responseCode = 200
+
+	jResponse := struct {
+		Status         string `json:"status"`
+		CryptedMessage string `json:"cryptedMessage"`
+	}{
+		Status: "error",
+		//NewId:strconv.FormatInt(32, 16)
+		CryptedMessage: "0",
+	}
+
+	var payload struct {
+		Id        string `json:"id"`
+		HashedKey string `json:"hashedKey"`
+	}
+	dec := json.NewDecoder(r.Body)
+
+	if dec.More() {
+		err := dec.Decode(&payload)
+		if err == nil {
+			if len(payload.Id) > 0 && len(payload.HashedKey) > 0 {
+				log.Printf("Got payload: %v, %v\n", payload.Id, payload.HashedKey)
+				val := getMessageFromStorage(payload.Id)
+				if len(val) > 0 {
+
+					var storedMessage StoredMessage
+					err := json.Unmarshal([]byte(val), &storedMessage)
+					if err == nil {
+
+						if (storedMessage.HashedKey == payload.HashedKey) {
+							jResponse.Status = "ok"
+							jResponse.CryptedMessage = storedMessage.Message
+
+							dropFromStorage(payload.Id)
+						} else {
+							jResponse.Status="wrong key"
+							log.Println("Hashes aren't equal")
+						}
+					}
+ 				} else {
+ 					jResponse.Status = "no message"
+				}
+
+			}
+		}
+	}
+	response, _ = json.Marshal(jResponse)
+	return
+}
+
+func apiHandler(w http.ResponseWriter, r *http.Request) {
+	responseCode := 400
+	var response []byte
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "	content-type, accept")
+
+	apiCall := r.URL.Path[len("/api/"):]
+	log.Println("Api call: " + apiCall)
+	switch apiCall {
+	case "saveSecret":
+		responseCode, response = apiSaveSecret(r)
+	case "get":
+		responseCode, response = apiGetMessage(r)
+	default:
+		jResponse := struct {
+			Code        int    `json:"code"`
+			Description string `json:"description"`
+		}{responseCode, "Not implemented yet"}
+		response, _ = json.Marshal(jResponse)
+	}
 	w.WriteHeader(responseCode)
-	w.Write(jval)
+	w.Write(response)
+
 }
 
 //func icoHandler (w http.ResponseWriter, r *http.Request) {

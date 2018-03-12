@@ -20,6 +20,12 @@ func getRedisClient() *redis.Client {
 		DB:       0,
 	})
 }
+
+/*
+store value with global uniq key
+return key string(hexademical number)
+error in case of failure
+ */
 func saveToStorage(value interface{}, duration time.Duration) (newKey string, err error) {
 	client := getRedisClient()
 	val, err := client.Incr(globalIncrementalKey).Result()
@@ -31,11 +37,12 @@ func saveToStorage(value interface{}, duration time.Duration) (newKey string, er
 	}
 
 	return newKey, client.Set(getStoreKey(newKey), value, duration).Err()
-	//if err != nil {
-	//	log.Println(err)
-	//}
 }
 
+/*
+function constucts key for messages using format like 'messageKey<XX>'
+where XXXXXX is a hex-number
+ */
 func getStoreKey(key string) (string) {
 	return "messageKey" + key
 }
