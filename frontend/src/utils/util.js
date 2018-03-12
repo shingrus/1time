@@ -1,7 +1,12 @@
+
+export var Constants = {
+    randomKeyLen:6,
+};
+
 const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
 // create a key for symmetric encryption
 // pass in the desired length of your key
-export default function getRandomString(stringLen) {
+export  function getRandomString(stringLen) {
     let randomstring = '';
 
     for (let i = 0; i < stringLen; i++) {
@@ -9,5 +14,8 @@ export default function getRandomString(stringLen) {
         randomstring += chars[rnum];
     }
     return randomstring;
-};
+}
+
+
+
 

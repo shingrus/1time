@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 import {Button, FormGroup, FormControl, ControlLabel} from "react-bootstrap";
 import axios from "axios"
-import CryptoJS  from 'crypto-js'
-import getRandomString from '../utils/util'
+import CryptoJS from 'crypto-js'
+import {getRandomString, Constants} from '../utils/util';
+
 
 import "./NewMessage.css";
 
@@ -31,37 +32,38 @@ export default class NewMessage extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.setState({isLoading:true}); //block button
+        this.setState({isLoading: true}); //block button
         let _this = this;
 
 
         let apiBaseUrl = "http://localhost:8080/api/";
-        let randomString = getRandomString(6);
-        let secretMessage = randomString + this.state.secretMessage;
+        let randomKey = getRandomString(Constants.randomKeyLen);
+        let secretMessage =  this.state.secretMessage;
 
-        let sekretKey = randomString+this.state.secretKey;
+        let secretKey = this.state.secretKey + randomKey;
 
-        let encryptedMessage = CryptoJS.AES.encrypt(secretMessage, sekretKey);
+        let encryptedMessage = CryptoJS.AES.encrypt(secretMessage, secretKey);
+        let hashedKey = CryptoJS.SHA256(secretKey);
 
 
         // let decrypteddata = CryptoJS.AES.decrypt(encryptedMessage.toString(), sekretKey)
         // let decryptedMessage = decrypteddata.toString(CryptoJS.enc.Utf8);
 
 
-
         let payload = {
-            "secretMessage": encryptedMessage.toString(),
-            "secretKey": sekretKey
+            secretMessage: encryptedMessage.toString(),
+            hashedKey: hashedKey.toString(),
         };
+        console.log("payload:" + hashedKey);
         axios.post(apiBaseUrl + 'saveSecret', payload)
             .then(function (response) {
                 console.log(response);
                 if (response.data.status === "ok") {
                     let newLink = response.data.newId;
-                    console.log("got: "+newLink + ", random: " + randomString);
+                    console.log("got: " + newLink + ", random: " + randomKey);
                     //navigate to view
                     let state = {
-                        randomString: randomString,
+                        randomString: randomKey,
                         newId: response.data.newId
                     };
                     _this.props.history.push(
@@ -73,7 +75,9 @@ export default class NewMessage extends Component {
 
                 }
                 else {
-                    console.log("Username does not exists");
+                    console.log("Something went wrong");
+                    //TODO show error
+                    _this.setState({isLoading: false})
                     // alert("Username does not exist");
                 }
             })
@@ -81,7 +85,6 @@ export default class NewMessage extends Component {
                 console.log(error);
             });
     }
-
 
 
     render() {
@@ -112,10 +115,10 @@ export default class NewMessage extends Component {
                         block
                         bsSize="large"
                         bsStyle="primary"
-                        disabled={!this.validateForm()||this.state.isLoading}
+                        disabled={!this.validateForm() || this.state.isLoading}
                         type="submit"
                     >
-                        {!this.state.isLoading ? "Encrypt and store":"Loading..."}
+                        {!this.state.isLoading ? "Encrypt and store" : "Loading..."}
                     </Button>
                 </form>
             </div>
