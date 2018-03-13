@@ -43,11 +43,6 @@ export default class NewMessage extends Component {
         let encryptedMessage = CryptoJS.AES.encrypt(secretMessage, secretKey);
         let hashedKey = CryptoJS.SHA256(secretKey);
 
-
-        // let decrypteddata = CryptoJS.AES.decrypt(encryptedMessage.toString(), sekretKey)
-        // let decryptedMessage = decrypteddata.toString(CryptoJS.enc.Utf8);
-
-
         let payload = {
             secretMessage: encryptedMessage.toString(),
             hashedKey: hashedKey.toString(),
@@ -57,9 +52,6 @@ export default class NewMessage extends Component {
             .then(function (response) {
                 console.log(response);
                 if (response.data.status === "ok") {
-                    let newLink = response.data.newId;
-                    console.log("got: " + newLink + ", random: " + randomKey);
-                    //navigate to view
                     let state = {
                         randomString: randomKey,
                         newId: response.data.newId
@@ -73,13 +65,12 @@ export default class NewMessage extends Component {
 
                 }
                 else {
-                    console.log("Something went wrong");
                     //TODO show error
-                    _this.setState({isLoading: false})
-                    // alert("Username does not exist");
+                    _this.setState({isLoading: false});
                 }
             })
             .catch(function (error) {
+                _this.setState({isLoading: false});
                 console.log(error);
             });
     }
