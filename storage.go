@@ -16,7 +16,7 @@ const globalIncrementalKey = "nextIncrementalKey"
 func getRedisClient() *redis.Client {
 	return redis.NewClient(&redis.Options{
 		Addr:     redisHost,
-		Password: redisPassword, //"buNSG1vfIIrLyT7LyGnesywdoijtyddo",
+		Password: redisPassword,
 		DB:       0,
 	})
 }

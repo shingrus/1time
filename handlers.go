@@ -255,12 +255,12 @@ func apiGetMessage(r *http.Request) (responseCode int, response []byte) {
 
 							dropFromStorage(payload.Id)
 						} else {
-							jResponse.Status="wrong key"
+							jResponse.Status = "wrong key"
 							log.Println("Hashes aren't equal")
 						}
 					}
- 				} else {
- 					jResponse.Status = "no message"
+				} else {
+					jResponse.Status = "no message"
 				}
 
 			}
@@ -274,8 +274,11 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	responseCode := 400
 	var response []byte
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "	content-type, accept")
+
+	if DEBUG {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "	content-type, accept")
+	}
 
 	apiCall := r.URL.Path[len("/api/"):]
 	log.Println("Api call: " + apiCall)
@@ -295,11 +298,3 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(response)
 
 }
-
-//func icoHandler (w http.ResponseWriter, r *http.Request) {
-//
-//	body, _:= ioutil.ReadFile("ico/favicon-1024.png")
-//	w.Write(body)
-//
-//
-//}
