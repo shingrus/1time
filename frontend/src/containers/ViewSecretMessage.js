@@ -118,7 +118,7 @@ export default class ViewSecretMessage extends React.Component {
                         type="submit"
                         disabled={this.state.isLoading}
                     >
-                        {!this.state.isLoading ? "Encrypt and store" : "Loading..."}
+                        {!this.state.isLoading ? "Read the message" : "Loading..."}
                     </Button>
                     }
                     {this.state.secretMessage.length > 0 &&
