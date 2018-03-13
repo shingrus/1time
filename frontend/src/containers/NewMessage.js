@@ -78,7 +78,7 @@ export default class NewMessage extends Component {
 
     render() {
         return (
-            <div className="Center">
+            <div className="Left">
                 <form onSubmit={this.handleSubmit}>
                     <FormGroup controlId="secretMessage" bsSize="large">
                         <ControlLabel>One-time Message</ControlLabel>

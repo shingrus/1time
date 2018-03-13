@@ -15,7 +15,8 @@ export default class ViewSecretMessage extends React.Component {
             isLoading: false,
             secretMessage: "",
             secretKey: "",
-            isWrongKey:false
+            needSecretKey: "",
+            isWrongKey: false,
         }
     }
 
@@ -27,7 +28,7 @@ export default class ViewSecretMessage extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        this.setState({isLoading: true, isWrongKey:false});
+        this.setState({isLoading: true, isWrongKey: false});
         let _this = this;
 
         let arr = window.location.href.split("/");
@@ -54,14 +55,14 @@ export default class ViewSecretMessage extends React.Component {
                         let decrypteddata = CryptoJS.AES.decrypt(response.data.cryptedMessage, secretKey);
                         let decryptedMessage = decrypteddata.toString(CryptoJS.enc.Utf8);
                         console.log("Decrypted message: " + decryptedMessage);
-                        _this.setState({isLoading:false, secretMessage: decryptedMessage})
-                    } else if(response.data.status === "wrong key") {
+                        _this.setState({isLoading: false, secretMessage: decryptedMessage})
+                    } else if (response.data.status === "wrong key") {
                         console.log("Wrong key");
-                        _this.setState({isLoading: false, isWrongKey:true});
+                        _this.setState({isLoading: false, isWrongKey: true, needSecretKey: true,});
                     }
-                    else if(response.data.status === "no message") {
+                    else if (response.data.status === "no message") {
                         console.log("No message");
-                        _this.setState({isLoading: false, isNoMessage       :true});
+                        _this.setState({isLoading: false, isNoMessage: true});
                     }
                     else {
                         console.log("Something went wrong");
@@ -85,9 +86,12 @@ export default class ViewSecretMessage extends React.Component {
 
     render() {
         return (
-            <div className="Center">
+            <div className="Left">
+                {this.state.secretMessage.length === 0 && !this.state.isNoMessage &&
+                <p>You are about to read the secret message. Once you readed it will be destoyed.</p>
+                }
                 <form onSubmit={this.handleSubmit}>
-                    {this.state.secretMessage.length === 0 &&
+                    {this.state.secretMessage.length === 0 && !this.state.isNoMessage && this.state.needSecretKey &&
                     <FormGroup controlId="secretKey" bsSize="large">
                         <ControlLabel aria-describedby="keyHelp">Secret Key</ControlLabel>
                         <FormControl
@@ -110,29 +114,35 @@ export default class ViewSecretMessage extends React.Component {
                         />
                     </FormGroup>
                     }
-                    {this.state.secretMessage.length === 0 &&
-                    <Button
-                        block
-                        bsSize="large"
-                        bsStyle="primary"
-                        type="submit"
-                        disabled={this.state.isLoading}
-                    >
-                        {!this.state.isLoading ? "Read the message" : "Loading..."}
-                    </Button>
+                    {this.state.secretMessage.length === 0 && !this.state.isNoMessage &&
+                    <div className="Center">
+                        <Button
+                            bsSize="large"
+                            bsStyle="primary"
+                            type="submit"
+                            disabled={this.state.isLoading}
+                        >
+                            {!this.state.isLoading ? "Read the message" : "Loading..."}
+                        </Button>
+                    </div>
                     }
-                    {this.state.secretMessage.length > 0 &&
-                    <Button
-                        block
-                        bsSize="large"
-                        bsStyle="primary"
-                        type="submit"
-                        onClick={() => this.props.history.push('/')}
-                    >
-                        Create New
-                    </Button>
+                    {(this.state.secretMessage.length > 0 || this.state.isNoMessage) &&
+                    <div className="Center">
+                        <p className="large">
+                            Message was destroyed.
+                        </p>
+                        <Button
+                            bsSize="large"
+                            bsStyle="primary"
+                            type="submit"
+                            onClick={() => this.props.history.push('/')}
+                        >
+                            Create New
+                        </Button>
+                    </div>
                     }
                 </form>
+
             </div>
         );
     }

@@ -51,7 +51,7 @@ export default class ShowNewLink extends Component {
 
                 </FormGroup>
                 <div className="Center">
-                <Button className="text-center" bsStyle="primary sm"
+                <Button className="text-center" bsStyle="primary"
                         onClick={this.copyLink}>{!this.state.copied ? "Copy" : "Copied"}</Button>
                 </div>
                 <p className="small centered"><br/>
