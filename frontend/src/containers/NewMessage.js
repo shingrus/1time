@@ -85,12 +85,15 @@ export default class NewMessage extends Component {
                         <FormControl
                             autoFocus
                             componentClass="textarea"
+                            placeholder="All content will be encrypted with uniq key. We don't have any access to this content on server side!"
+                            rows={4}
                             value={this.state.secretMessage}
                             onChange={this.handleChange}
                         />
                     </FormGroup>
                     <FormGroup controlId="secretKey" bsSize="large">
                         <ControlLabel aria-describedby="keyHelp">Secret Key</ControlLabel>
+                        <p className="small">You can specify a secret key. If anybody get the one-time link, he needs to know this additional secret key.</p>
                         <FormControl
                             placeholder="Secret Key"
                             value={this.state.secretKey}
@@ -109,6 +112,7 @@ export default class NewMessage extends Component {
                     >
                         {!this.state.isLoading ? "Encrypt and store" : "Loading..."}
                     </Button>
+                    <p className="small">Paste private text like passwords, one-time tokens or any sensitive data, get one-time link and send it to trusted user. When a user openes the link the content will be destoyed. It's absolutely private. We don't have accesss to the stored data, because it's encrypted on the client side with one-time password. Data available only for 7 days.</p>
                 </form>
             </div>
         );

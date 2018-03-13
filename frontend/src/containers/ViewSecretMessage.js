@@ -132,7 +132,6 @@ export default class ViewSecretMessage extends React.Component {
                         Create New
                     </Button>
                     }
-
                 </form>
             </div>
         );

@@ -40,6 +40,7 @@ export default class ShowNewLink extends Component {
         return (
 
             <div className="Center">
+                <p className="small centered">This is the private one-time link. It could be opened only ones. Once it's open the content will be DELETED. The Message was encrypted, so it's impossible for us to read it.</p>
                 <FormGroup>
                     <InputGroup>
                         <InputGroup.Addon>Secret one-time link: </InputGroup.Addon>
@@ -49,8 +50,8 @@ export default class ShowNewLink extends Component {
 
                 </FormGroup>
                 <p>
-                    <Button bsStyle="primary" onClick={this.copyLink}>{!this.state.copied ? "Copy" : "Copied"}</Button>
-                    <Button bsStyle="info" onClick={() => this.props.history.push('/')}>New message</Button>
+                    <Button bsStyle="primary sm" onClick={this.copyLink}>{!this.state.copied ? "Copy" : "Copied"}</Button>
+                    {/*<Button bsStyle="info" onClick={() => this.props.history.push('/')}>New message</Button>*/}
                 </p>
             </div>
         )

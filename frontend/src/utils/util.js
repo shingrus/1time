@@ -1,6 +1,9 @@
-    export var Constants = {
+let arr = window.location.href.split("/");
+let host = arr[0] + "//" + arr[2];
+
+export var Constants = {
     randomKeyLen:6,
-    apiBaseUrl: process.env.NODE_ENV === 'development'? "http://localhost:8080/api/" : "http://1time.click/api/"
+    apiBaseUrl: process.env.NODE_ENV === 'development'? "http://localhost:8080/api/" : host+"/api/"
 };
 
 const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";

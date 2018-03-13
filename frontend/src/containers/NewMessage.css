@@ -7,4 +7,8 @@
         margin: 0 auto;
         max-width: 600px;
     }
+
+    p.centered {
+        text-align: center;
+    }
 }
