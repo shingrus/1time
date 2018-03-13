@@ -14,7 +14,7 @@ export default class ShowNewLink extends Component {
 
             let arr = window.location.href.split("/");
             let host = arr[0] + "//" + arr[2];
-            this.state.newLink =  host + "/v/" +  props.location.state.randomString + props.location.state.newId;
+            this.state.newLink = host + "/v/" + props.location.state.randomString + props.location.state.newId;
         }
 
         console.log("load show new link: " + this.state.newLink)
@@ -40,7 +40,8 @@ export default class ShowNewLink extends Component {
         return (
 
             <div className="Center">
-                <p className="small centered">This is the private one-time link. It could be opened only ones. Once it's open the content will be DELETED. The Message was encrypted, so it's impossible for us to read it.</p>
+
+
                 <FormGroup>
                     <InputGroup>
                         <InputGroup.Addon>Secret one-time link: </InputGroup.Addon>
@@ -49,10 +50,15 @@ export default class ShowNewLink extends Component {
                     </InputGroup>
 
                 </FormGroup>
-                <p>
-                    <Button bsStyle="primary sm" onClick={this.copyLink}>{!this.state.copied ? "Copy" : "Copied"}</Button>
-                    {/*<Button bsStyle="info" onClick={() => this.props.history.push('/')}>New message</Button>*/}
+                <div className="Center">
+                <Button className="text-center" bsStyle="primary sm"
+                        onClick={this.copyLink}>{!this.state.copied ? "Copy" : "Copied"}</Button>
+                </div>
+                <p className="small centered"><br/>
+                    This is the private one-time link. It could be opened only ones. Once it's open the content will be
+                    DELETED. The Message was encrypted, so it's impossible for us to read it.
                 </p>
+                {/*<Button bsStyle="info" onClick={() => this.props.history.push('/')}>New message</Button>*/}
             </div>
         )
     }

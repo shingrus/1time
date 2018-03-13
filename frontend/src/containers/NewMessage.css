@@ -3,9 +3,10 @@
         padding: 60px 0;
     }
 
-    .Center {
-        margin: 0 auto;
+    div.Center {
+        margin: 10px auto;
         max-width: 600px;
+        text-align: center;
     }
 
     p.centered {
