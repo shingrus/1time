@@ -45,14 +45,19 @@ export default class ShowNewLink extends Component {
                 <FormGroup>
                     <InputGroup>
                         <InputGroup.Addon>Secret one-time link: </InputGroup.Addon>
-                        <FormControl type="text" value={this.state.newLink} inputRef={input => this.textInput = input}
+                        <FormControl type="text"
+                                     value={this.state.newLink}
+                                     inputRef={input => this.textInput = input}
                                      readOnly/>
                     </InputGroup>
 
                 </FormGroup>
                 <div className="Center">
-                <Button className="text-center" bsStyle="primary"
-                        onClick={this.copyLink}>{!this.state.copied ? "Copy" : "Copied"}</Button>
+                    <Button className="text-center"
+                            bsStyle="primary"
+                            bsSize="large"
+                            onClick={this.copyLink}>{!this.state.copied ? "Copy" : "Copied"}
+                    </Button>
                 </div>
                 <p className="small centered"><br/>
                     This is the private one-time link. It could be opened only ones. Once it's open the content will be
