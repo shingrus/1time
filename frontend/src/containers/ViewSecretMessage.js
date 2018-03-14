@@ -44,7 +44,6 @@ export default class ViewSecretMessage extends React.Component {
                 id: id,
                 hashedKey: hashedKey
             };
-            console.log(payload);
             axios.post(Constants.apiBaseUrl + 'get', payload)
                 .then(function (response) {
                     if (response.data.status === "ok" &&
@@ -54,18 +53,18 @@ export default class ViewSecretMessage extends React.Component {
 
                         let decrypteddata = CryptoJS.AES.decrypt(response.data.cryptedMessage, secretKey);
                         let decryptedMessage = decrypteddata.toString(CryptoJS.enc.Utf8);
-                        console.log("Decrypted message: " + decryptedMessage);
+                        // console.log("Decrypted message: " + decryptedMessage);
                         _this.setState({isLoading: false, secretMessage: decryptedMessage})
                     } else if (response.data.status === "wrong key") {
                         console.log("Wrong key");
                         _this.setState({isLoading: false, isWrongKey: true, needSecretKey: true,});
                     }
                     else if (response.data.status === "no message") {
-                        console.log("No message");
+                        // console.log("No message");
                         _this.setState({isLoading: false, isNoMessage: true});
                     }
                     else {
-                        console.log("Something went wrong");
+                        // console.log("Something went wrong");
                         //TODO show error
                         _this.setState({isLoading: false})
                     }
