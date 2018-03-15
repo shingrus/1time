@@ -3,12 +3,22 @@
         padding: 60px 0;
     }
 
+    div.outer-div
+    {
+        padding: 30px;
+    }
 
     div.Center {
         margin: 10px auto;
+        /*width: 100px;*/
         max-width: 600px;
         text-align: center;
     }
+
+    .center-block {
+        display: inline-block;
+    }
+
 
     div.Left {
         margin: 10px auto;

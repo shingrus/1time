@@ -5,7 +5,7 @@ import CryptoJS from 'crypto-js'
 import {getRandomString, Constants} from '../utils/util';
 
 
-import "./NewMessage.css";
+import "./Container.css";
 
 export default class NewMessage extends Component {
     constructor(props) {
@@ -112,7 +112,7 @@ export default class NewMessage extends Component {
                     >
                         {!this.state.isLoading ? "Encrypt and store" : "Loading..."}
                     </Button>
-                    <p className="small">Paste private text like passwords, one-time tokens or any sensitive data, get one-time link and send it to trusted user. When a user openes the link the content will be destoyed. It's absolutely private. We don't have accesss to the stored data, because it's encrypted on the client side with one-time password. Data available only for 7 days.</p>
+                    <p className="small">Paste private text like passwords, one-time tokens or any sensitive data, get one-time link and send it to trusted user. When a user openes the link the content will be destroyed. It's absolutely private. We don't have access to the stored data, because it's encrypted on the client side with one-time password. Data available only for 7 days.</p>
                 </form>
             </div>
         );

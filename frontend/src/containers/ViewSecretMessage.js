@@ -4,7 +4,7 @@ import axios from 'axios/index';
 import CryptoJS from 'crypto-js'
 import {Constants} from '../utils/util';
 
-import "./NewMessage.css";
+import "./Container.css";
 
 
 export default class ViewSecretMessage extends React.Component {
@@ -19,6 +19,7 @@ export default class ViewSecretMessage extends React.Component {
             isWrongKey: false,
         }
     }
+
 
     handleChange = event => {
         this.setState({
@@ -87,7 +88,7 @@ export default class ViewSecretMessage extends React.Component {
         return (
             <div className="Left">
                 {this.state.secretMessage.length === 0 && !this.state.isNoMessage &&
-                <p>You are about to read the secret message. Once you readed it will be destoyed.</p>
+                <p>You are about to read the secret message. Once you read it will be destroyed.</p>
                 }
                 <form onSubmit={this.handleSubmit}>
                     {this.state.secretMessage.length === 0 && !this.state.isNoMessage && this.state.needSecretKey &&
@@ -114,16 +115,17 @@ export default class ViewSecretMessage extends React.Component {
                     </FormGroup>
                     }
                     {this.state.secretMessage.length === 0 && !this.state.isNoMessage &&
-                    <div className="Center">
-                        <Button
-                            bsSize="large"
-                            bsStyle="primary"
-                            type="submit"
-                            disabled={this.state.isLoading}
-                        >
-                            {!this.state.isLoading ? "Read the message" : "Loading..."}
-                        </Button>
-                    </div>
+                        <div className="Center">
+                            <Button
+                                bsSize="large"
+                                bsStyle="primary"
+                                className="center-block"
+                                type="submit"
+                                disabled={this.state.isLoading}
+                            >
+                                {!this.state.isLoading ? "Read the message" : "Loading..."}
+                            </Button>
+                        </div>
                     }
                     {(this.state.secretMessage.length > 0 || this.state.isNoMessage) &&
                     <div className="Center">
@@ -133,6 +135,7 @@ export default class ViewSecretMessage extends React.Component {
                         <Button
                             bsSize="large"
                             bsStyle="primary"
+                            className="center-block"
                             type="submit"
                             onClick={() => this.props.history.push('/')}
                         >

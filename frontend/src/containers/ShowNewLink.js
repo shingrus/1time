@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {FormGroup, Button, InputGroup, FormControl} from 'react-bootstrap';
-import "./NewMessage.css";
+import "./Container.css";
 
 export default class ShowNewLink extends Component {
     constructor(props) {
@@ -22,7 +22,7 @@ export default class ShowNewLink extends Component {
     copyLink = () => {
         //https://stackoverflow.com/a/41267511/5803103
         if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
-            let  el = this.textInput;
+            let el = this.textInput;
             let editable = el.contentEditable;
             let readOnly = el.readOnly;
             el.contentEditable = true;
@@ -48,7 +48,6 @@ export default class ShowNewLink extends Component {
 
     render() {
         return (
-
             <div className="Center">
                 <FormGroup>
                     <InputGroup>
@@ -56,17 +55,19 @@ export default class ShowNewLink extends Component {
                         <FormControl type="text"
                                      value={this.state.newLink}
                                      inputRef={input => this.textInput = input}
-                                     onFocus={()=>{this.copyLink()}}
+                                     onFocus={() => {
+                                         this.copyLink()
+                                     }}
                                      readOnly/>
                     </InputGroup>
-
                 </FormGroup>
 
-                    <Button className="text-center"
-                            bsStyle="primary"
-                            bsSize="large"
-                            onClick={this.copyLink}>{!this.state.copied ? "Copy" : "Copied"}
-                    </Button>
+                    <div className="Center">
+                        <Button className="center-block"
+                                bsStyle="primary"
+                                bsSize="large"
+                                onClick={this.copyLink}>{!this.state.copied ? "Copy" : "Copied"}
+                        </Button></div>
                 <p className="small centered"><br/>
                     This is the private one-time link. It could be opened only ones. Once it's open the content will be
                     DELETED. The Message was encrypted, so it's impossible for us to read it.
