@@ -56,6 +56,7 @@ export default class ShowNewLink extends Component {
                         <FormControl type="text"
                                      value={this.state.newLink}
                                      inputRef={input => this.textInput = input}
+                                     onFocus={()=>{this.copyLink()}}
                                      readOnly/>
                     </InputGroup>
 
