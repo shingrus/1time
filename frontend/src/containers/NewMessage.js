@@ -127,11 +127,10 @@ export default class NewMessage extends Component {
                             disabled={!this.validateForm() || this.state.isLoading}
                             type="submit"
                         >
-                            {!this.state.isLoading ? "Encrypt and store" : "Loading..."}
+                            {!this.state.isLoading ? "Get a link" : "Loading..."}
                         </Button></FormGroup>
                     <FormGroup>
-                        <FormControl.Static className="small">Static text
-                        Send passwords, one-time tokens, private messages or any sensitive
+                        <FormControl.Static className="small">Send passwords, one-time tokens, private messages or any sensitive
                             data with
                             strongly encrypted one-time link. When the user opens the link content is destroyed. It's
                             absolutely private. We don't have access to the stored data, because it's encrypted on the
