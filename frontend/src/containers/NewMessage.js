@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, FormGroup, FormControl, ControlLabel} from "react-bootstrap";
+import {Button, FormGroup, FormControl, ControlLabel,} from "react-bootstrap";
 import axios from "axios"
 import CryptoJS from 'crypto-js'
 import {getRandomString, Constants} from '../utils/util';
@@ -14,6 +14,8 @@ export default class NewMessage extends Component {
         this.state = {
             secretMessage: "",
             secretKey: "",
+            duration: Constants.defaultDuration,
+            needOptions:false,
             isLoading: false,
         };
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -36,18 +38,21 @@ export default class NewMessage extends Component {
         let _this = this;
 
         let randomKey = getRandomString(Constants.randomKeyLen);
-        let secretMessage =  this.state.secretMessage;
+        let secretMessage = this.state.secretMessage;
+        let duration = parseInt(this.state.duration,10);
 
         let secretKey = this.state.secretKey + randomKey;
 
         let encryptedMessage = CryptoJS.AES.encrypt(secretMessage, secretKey);
         let hashedKey = CryptoJS.SHA256(secretKey);
 
+
         let payload = {
             secretMessage: encryptedMessage.toString(),
             hashedKey: hashedKey.toString(),
+            duration: duration*86400,
         };
-        console.log("payload:" + hashedKey);
+        console.log(payload);
         axios.post(Constants.apiBaseUrl + 'saveSecret', payload)
             .then(function (response) {
                 console.log(response);
@@ -91,28 +96,47 @@ export default class NewMessage extends Component {
                             onChange={this.handleChange}
                         />
                     </FormGroup>
-                    <FormGroup controlId="secretKey" bsSize="large">
-                        <ControlLabel aria-describedby="keyHelp">Secret Key</ControlLabel>
-                        <p className="small">You can specify a secret key. If anybody get the one-time link, he needs to know this additional secret key.</p>
-                        <FormControl
-                            placeholder="Secret Key"
-                            value={this.state.secretKey}
-                            onChange={this.handleChange}
-                            type="text"
-                        />
+                    {this.state.needOptions ?
+                        <FormGroup><ControlLabel aria-describedby="keyHelp">Additional Secret Key:</ControlLabel>
+                            <FormControl id="secretKey"
+                                placeholder="Secret Key"
+                                value={this.state.secretKey}
+                                onChange={this.handleChange}
+                                type="text"
+                            /><ControlLabel aria-describedby="DurationHelp">Keep message for: </ControlLabel>
+                            <FormControl componentClass="select" id="duration"  value={this.state.duration} onChange={this.handleChange}>
+                                <option value="1">1 day</option>
+                                <option value="3">3 days</option>
+                                <option value="7">7 days</option>
+                                <option value="30">30 days</option>
+                            </FormControl></FormGroup>: null}
+
+                    <FormGroup className="block">
+                        <Button
+                            className=""
+                            bsStyle="default"
+                            onClick={(event) => {
+                                this.setState({needOptions: !this.state.needOptions})
+                            }}
+                        >Options
+                        </Button>
+                        <Button
+                            className="pull-right"
+                            bsStyle="success"
+                            bsSize="large"
+                            disabled={!this.validateForm() || this.state.isLoading}
+                            type="submit"
+                        >
+                            {!this.state.isLoading ? "Encrypt and store" : "Loading..."}
+                        </Button></FormGroup>
+                    <FormGroup>
+                        <FormControl.Static className="small">Static text
+                        Send passwords, one-time tokens, private messages or any sensitive
+                            data with
+                            strongly encrypted one-time link. When the user opens the link content is destroyed. It's
+                            absolutely private. We don't have access to the stored data, because it's encrypted on the
+                            client side with one-time password. The link available only for 7 days.</FormControl.Static>
                     </FormGroup>
-
-
-                    <Button
-                        block
-                        bsSize="large"
-                        bsStyle="primary"
-                        disabled={!this.validateForm() || this.state.isLoading}
-                        type="submit"
-                    >
-                        {!this.state.isLoading ? "Encrypt and store" : "Loading..."}
-                    </Button>
-                    <p className="small">Send passwords, one-time tokens, private messages or any sensitive data with strongly encrypted one-time link. When the user opens the link content is destroyed. It's absolutely private. We don't have access to the stored data, because it's encrypted on the client side with one-time password. The link available only for 7 days.</p>
                 </form>
             </div>
         );
