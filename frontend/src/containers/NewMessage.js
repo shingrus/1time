@@ -112,7 +112,7 @@ export default class NewMessage extends Component {
                     >
                         {!this.state.isLoading ? "Encrypt and store" : "Loading..."}
                     </Button>
-                    <p className="small">Paste private text like passwords, one-time tokens or any sensitive data, get one-time link and send it to trusted user. When a user openes the link the content will be destroyed. It's absolutely private. We don't have access to the stored data, because it's encrypted on the client side with one-time password. Data available only for 7 days.</p>
+                    <p className="small">Send passwords, one-time tokens, private messages or any sensitive data with strongly encrypted one-time link. When the user opens the link content is destroyed. It's absolutely private. We don't have access to the stored data, because it's encrypted on the client side with one-time password. The link available only for 7 days.</p>
                 </form>
             </div>
         );
