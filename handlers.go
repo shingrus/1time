@@ -185,6 +185,7 @@ func apiSaveSecret(r *http.Request) (responseCode int, response []byte) {
 	var payload struct {
 		SecretMessage string `json:"secretMessage"`
 		HashedKey     string `json:"hashedKey"`
+		Duration      int    `json:"duration"`
 	}
 	dec := json.NewDecoder(r.Body)
 
@@ -199,9 +200,14 @@ func apiSaveSecret(r *http.Request) (responseCode int, response []byte) {
 					HashedKey: payload.HashedKey,
 				}
 
-				log.Printf("Got payllaod: %v, Hashedkey: %v\n", payload.SecretMessage, payload.HashedKey)
+				if payload.Duration <= 0 || payload.Duration > 86400*30 {
+					payload.Duration = defaultDuration
+				}
+
+
+				log.Printf("Got payllaod: %v, Hashedkey: %v, Duration: %v\n", payload.SecretMessage, payload.HashedKey, payload.Duration	)
 				valueToStore, _ := json.Marshal(newMessage)
-				storeKey, err := saveToStorage(valueToStore, defaultDuration*time.Second)
+				storeKey, err := saveToStorage(valueToStore, time.Duration(payload.Duration)*time.Second)
 				if err == nil {
 					jResponse.NewId = storeKey
 					jResponse.Status = "ok"
