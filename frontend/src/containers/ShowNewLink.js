@@ -1,5 +1,9 @@
 import React, {Component} from "react";
 import {FormGroup, Button, InputGroup, FormControl} from 'react-bootstrap';
+import {
+    EmailShareButton, TelegramShareButton, WhatsappShareButton,
+    EmailIcon, TelegramIcon, WhatsappIcon
+} from 'react-share'
 import "./Container.css";
 
 export default class ShowNewLink extends Component {
@@ -61,15 +65,27 @@ export default class ShowNewLink extends Component {
                                      readOnly/>
                     </InputGroup>
                 </FormGroup>
+                {!navigator.userAgent.match(/ipad|ipod|iphone/i) ?
+                <div className="outer-row">
+                    <WhatsappShareButton url={this.state.newLink} className="inner">
+                        <WhatsappIcon size={34}/></WhatsappShareButton>
+                    <TelegramShareButton url={this.state.newLink} className="inner">
+                        <TelegramIcon size={34}/>
+                    </TelegramShareButton>
 
-                    <div className="Center">
-                        <Button className="center-block"
-                                bsStyle="primary"
-                                bsSize="large"
-                                onClick={this.copyLink}>{!this.state.copied ? "Copy" : "Copied"}
-                        </Button></div>
+                    <EmailShareButton url={this.state.newLink} className="inner"><EmailIcon
+                        size={34}/></EmailShareButton>
+                </div> : null
+
+                }
+                <Button className={navigator.userAgent.match(/ipad|ipod|iphone/i)?"center-block":"inner"}
+                        bsStyle="primary"
+                        bsSize="large"
+                        onClick={this.copyLink}>{!this.state.copied ? "Copy to clipboard" : "Copied"}
+                </Button>
+
                 <p className="small centered"><br/>
-                    This is the private one-time link. It could be opened only ones. Once it's open the content will be
+                    This secret one-time link works only once. Once it's open the content will be
                     DELETED. The Message was encrypted, so it's impossible for us to read it.
                 </p>
                 {/*<Button bsStyle="info" onClick={() => this.props.history.push('/')}>New message</Button>*/}
