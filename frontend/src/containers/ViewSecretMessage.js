@@ -110,6 +110,7 @@ export default class ViewSecretMessage extends React.Component {
                             componentClass="textarea"
                             value={this.state.secretMessage}
                             disabled="true"
+                            rows={4}
                             onChange={this.handleChange}
                         />
                     </FormGroup>
