@@ -1,5 +1,5 @@
 import React from 'react';
-import {FormGroup, ControlLabel, FormControl, Button} from 'react-bootstrap'
+import {FormGroup, ControlLabel, FormControl, Button, Panel} from 'react-bootstrap'
 import axios from 'axios/index';
 import CryptoJS from 'crypto-js'
 import {Constants} from '../utils/util';
@@ -103,30 +103,25 @@ export default class ViewSecretMessage extends React.Component {
                     </FormGroup>
                     }
                     {this.state.secretMessage.length > 0 &&
-                    <FormGroup controlId="secretMessage" bsSize="large">
-                        <ControlLabel>One-time Message</ControlLabel>
-                        <FormControl
-                            autoFocus
-                            componentClass="textarea"
-                            value={this.state.secretMessage}
-                            disabled="true"
-                            rows={4}
-                            onChange={this.handleChange}
-                        />
-                    </FormGroup>
+                    <Panel>
+                        <Panel.Heading>
+                            <Panel.Title componentClass="h3">One-time message:</Panel.Title>
+                        </Panel.Heading>
+                        <Panel.Body>{this.state.secretMessage}</Panel.Body>
+                    </Panel>
                     }
                     {this.state.secretMessage.length === 0 && !this.state.isNoMessage &&
-                        <div className="Center">
-                            <Button
-                                bsSize="large"
-                                bsStyle="primary"
-                                className="center-block"
-                                type="submit"
-                                disabled={this.state.isLoading}
-                            >
-                                {!this.state.isLoading ? "Read the message" : "Loading..."}
-                            </Button>
-                        </div>
+                    <div className="Center">
+                        <Button
+                            bsSize="large"
+                            bsStyle="primary"
+                            className="center-block"
+                            type="submit"
+                            disabled={this.state.isLoading}
+                        >
+                            {!this.state.isLoading ? "Read the message" : "Loading..."}
+                        </Button>
+                    </div>
                     }
                     {(this.state.secretMessage.length > 0 || this.state.isNoMessage) &&
                     <div className="Center">
