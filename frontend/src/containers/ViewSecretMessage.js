@@ -3,6 +3,7 @@ import {FormGroup, ControlLabel, FormControl, Button, Panel} from 'react-bootstr
 import axios from 'axios/index';
 import CryptoJS from 'crypto-js'
 import {Constants} from '../utils/util';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import "./Container.css";
 
@@ -108,13 +109,26 @@ export default class ViewSecretMessage extends React.Component {
                             <Panel.Title componentClass="h3">One-time message:</Panel.Title>
                         </Panel.Heading>
                         <Panel.Body>{this.state.secretMessage}</Panel.Body>
+                        <Panel.Heading>
+                            <Panel.Title componentClass="h3">
+                                <CopyToClipboard
+                                    text={this.state.secretMessage}
+                                                     onCopy={() => this.setState({copied: true})} >
+                                <Button
+                                    bsSize="small"
+                                    bsStyle="success"
+                                    className="center-block"
+                                    type="submit"
+                                >{!this.state.copied ? "Copy to clipboard" : "Copied"}</Button></CopyToClipboard>
+                            </Panel.Title>
+                        </Panel.Heading>
                     </Panel>
                     }
                     {this.state.secretMessage.length === 0 && !this.state.isNoMessage &&
                     <div className="Center">
                         <Button
                             bsSize="large"
-                            bsStyle="primary"
+                            bsStyle="success"
                             className="center-block"
                             type="submit"
                             disabled={this.state.isLoading}
@@ -125,7 +139,7 @@ export default class ViewSecretMessage extends React.Component {
                     }
                     {(this.state.secretMessage.length > 0 || this.state.isNoMessage) &&
                     <div className="Center">
-                        <p className="large">
+                        <p className="small">
                             Message was destroyed.
                         </p>
                         <Button
