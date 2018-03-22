@@ -18,36 +18,8 @@ export default class ShowNewLink extends Component {
             this.state.newLink = host + "/v/" + props.location.state.randomString + props.location.state.newId;
         }
 
-        // console.log("load show new link: " + this.state.newLink)
     }
 
-    //
-    // copyLink = () => {
-    //     //https://stackoverflow.com/a/41267511/5803103
-    //     if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
-    //         let el = this.textInput;
-    //         let editable = el.contentEditable;
-    //         let readOnly = el.readOnly;
-    //         el.contentEditable = true;
-    //         el.readOnly = false;
-    //         let range = document.createRange();
-    //         range.selectNodeContents(el);
-    //         let sel = window.getSelection();
-    //         sel.removeAllRanges();
-    //         sel.addRange(range);
-    //         el.setSelectionRange(0, 999999);
-    //         el.contentEditable = editable;
-    //         el.readOnly = readOnly;
-    //     } else {
-    //         this.textInput.select();
-    //     }
-    //
-    //     document.execCommand('copy');
-    //     this.setState({copied: true});
-    //     this.textInput.blur();
-    //
-    //
-    // };
 
     render() {
         return (
