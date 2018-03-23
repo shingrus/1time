@@ -11,5 +11,6 @@ export default () =>
         <Route path="/" exact component={NewMessage} />
         <Route path="/new" ex    component={ShowNewLink} />
         <Route path="/v/(.*)"  component={ViewSecretMessage} />
+        <Route path="/error/(.*)"  component={ViewSecretMessage} />
         <Route  component={NewMessage} />
     </Switch>;
