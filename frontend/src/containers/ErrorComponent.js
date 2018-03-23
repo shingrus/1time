@@ -1,15 +1,24 @@
 import React from 'react';
-import {FormGroup, ControlLabel, FormControl, Button, Panel} from 'react-bootstrap'
-import axios from 'axios/index';
-import CryptoJS from 'crypto-js'
-import {Constants} from '../utils/util';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { Button} from 'react-bootstrap'
 
 import "./Container.css";
 
 
-export default class ViewSecretMessage extends React.Component {
+export default class ViewError extends React.Component {
     render() {
-        return (    )
+        return (<div className="Center">
+            <p className="large" color="red">
+                Page not found.
+            </p>
+            <Button
+                bsSize="large"
+                bsStyle="primary"
+                className="center-block"
+                type="submit"
+                onClick={() => this.props.history.push('/')}
+            >
+                Create New
+            </Button>
+        </div>)
     }
 }

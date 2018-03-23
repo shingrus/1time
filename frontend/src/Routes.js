@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import NewMessage from "./containers/NewMessage";
 import ShowNewLink from "./containers/ShowNewLink";
 import ViewSecretMessage from "./containers/ViewSecretMessage"
+import ViewError from './containers/ErrorComponent';
 
 
 export default () =>
@@ -11,6 +12,6 @@ export default () =>
         <Route path="/" exact component={NewMessage} />
         <Route path="/new" ex    component={ShowNewLink} />
         <Route path="/v/(.*)"  component={ViewSecretMessage} />
-        <Route path="/error/(.*)"  component={ViewSecretMessage} />
+        <Route path="/error(.*)"  component={ViewError} />
         <Route  component={NewMessage} />
     </Switch>;
