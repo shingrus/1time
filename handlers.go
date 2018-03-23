@@ -247,7 +247,7 @@ func apiGetMessage(r *http.Request) (responseCode int, response []byte) {
 		err := dec.Decode(&payload)
 		if err == nil {
 			if len(payload.Id) > 0 && len(payload.HashedKey) > 0 {
-				log.Printf("payload <-		 storage: %v, %v\n", payload.Id, payload.HashedKey)
+				log.Printf("payload <- storage: %v, %v\n", payload.Id, payload.HashedKey)
 				val := getMessageFromStorage(payload.Id)
 				if len(val) > 0 {
 
