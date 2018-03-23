@@ -10,6 +10,7 @@ export default () =>
     <Switch>
 
         <Route path="/" exact component={NewMessage} />
+        <Route path="/index.html" exact component={NewMessage} />
         <Route path="/new" ex    component={ShowNewLink} />
         <Route path="/v/(.*)"  component={ViewSecretMessage} />
         <Route component={ViewError} />
