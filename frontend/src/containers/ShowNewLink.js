@@ -60,7 +60,6 @@ export default class ShowNewLink extends Component {
                     This secret one-time link works only once. Once it's open the content will be
                     DELETED. The Message was encrypted, so it's impossible for us to read it.
                 </p>
-                {/*<Button bsStyle="info" onClick={() => this.props.history.push('/')}>New message</Button>*/}
             </div>
         )
     }
