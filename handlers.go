@@ -199,7 +199,7 @@ func apiUnsecSave(r *http.Request) (responseCode int, response []byte) {
 		err := dec.Decode(&payload)
 		if err == nil {
 			if len(payload.SecretMessage) > 0 {
-				log.Printf("Got payload: %v\n", payload)
+				// log.Printf("Got payload: %v\n", payload)
 
 				randKey := RandStringBytesMaskImprSrc(randKeyLen)
 
@@ -211,7 +211,6 @@ func apiUnsecSave(r *http.Request) (responseCode int, response []byte) {
 
 				enc, err := o.EncryptString(randKey, payload.SecretMessage)
 				if err == nil {
-					fmt.Printf("Encrypted text: %s\n", string(enc))
 					newMessage := StoredMessage{
 						Encrypted: true,
 						Message:   string(enc),
