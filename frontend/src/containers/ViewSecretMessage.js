@@ -52,7 +52,6 @@ export default class ViewSecretMessage extends React.Component {
                         typeof (response.data.cryptedMessage) !== "undefined" &&
                         response.data.cryptedMessage.length > 0
                     ) {
-
                         let decrypteddata = CryptoJS.AES.decrypt(response.data.cryptedMessage, secretKey);
                         let decryptedMessage = decrypteddata.toString(CryptoJS.enc.Utf8);
                         // console.log("Decrypted message: " + decryptedMessage);

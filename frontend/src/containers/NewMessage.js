@@ -46,7 +46,6 @@ export default class NewMessage extends Component {
         let encryptedMessage = CryptoJS.AES.encrypt(secretMessage, secretKey);
         let hashedKey = CryptoJS.SHA256(secretKey);
 
-
         let payload = {
             secretMessage: encryptedMessage.toString(),
             hashedKey: hashedKey.toString(),

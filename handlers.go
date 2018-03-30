@@ -7,16 +7,18 @@ import (
 	"log"
 	"time"
 	"strconv"
+	"github.com/Luzifer/go-openssl"
+	"fmt"
+	"crypto/sha256"
 )
 
 type StoredMessage struct {
-	Encrypted bool   `json:"encrypted"` //obsolete all messages are encrypted
+	Encrypted bool   `json:"encrypted"` // obsolete all messages are encrypted
 	Message   string `json:"message"`
 	HashedKey string `json:"hashedKey"`
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	//t := template.New("index")
 	t, err := template.ParseFiles("templates/form.html")
 	if err != nil {
 		log.Panic(err)
@@ -56,14 +58,14 @@ func saveSecretHandler(w http.ResponseWriter, r *http.Request) {
 
 	var newMessage StoredMessage
 
-	//encrypt
+	// encrypt
 
 	newkey := get32key(encryptKey)
 	newMessage.Message = encrypt([]byte(newkey), encryptKey+secretMessage)
 	newMessage.Encrypted = true
 
 	value, _ := json.Marshal(newMessage)
-	//store to storage
+	// store to storage
 
 	storeKey, err := saveToStorage(value, time.Second*duration)
 	if err != nil {
@@ -100,7 +102,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 		err := json.Unmarshal([]byte(val), &storedMessage)
 
 		if err == nil {
-			if (r.Method != "POST") {
+			if r.Method != "POST" {
 
 				if storedMessage.Encrypted {
 					if t, err := template.ParseFiles("templates/getkeyform.html"); err != nil {
@@ -170,6 +172,76 @@ func showError(errorStatus int, text string, w http.ResponseWriter) {
 	w.Write([]byte(text))
 }
 
+/**
+Json Payload should
+
+curl -X POST -H 'content-type: application/json' 'http://localhost:8080/api/unsecSave' -d '{"secretMessage":"test Message from GO"}'
+
+var payload struct {
+		SecretMessage string `json:"secretMessage"`
+	}
+ */
+func apiUnsecSave(r *http.Request) (responseCode int, response []byte) {
+	responseCode = 200
+	jResponse := struct {
+		Status  string `json:"status"`
+		NewLink string `json:"newLink"`
+	}{
+		Status:  "error",
+		NewLink: "",
+	}
+	var payload struct {
+		SecretMessage string `json:"secretMessage"`
+		Duration      int    `json:"duration"`
+	}
+	dec := json.NewDecoder(r.Body)
+	if dec.More() {
+		err := dec.Decode(&payload)
+		if err == nil {
+			if len(payload.SecretMessage) > 0 {
+				log.Printf("Got payload: %v\n", payload)
+
+				randKey := RandStringBytesMaskImprSrc(randKeyLen)
+
+				if payload.Duration <= 0 || payload.Duration > maxDuration {
+					payload.Duration = defaultDuration
+				}
+
+				o := openssl.New()
+
+				enc, err := o.EncryptString(randKey, payload.SecretMessage)
+				if err == nil {
+					fmt.Printf("Encrypted text: %s\n", string(enc))
+					newMessage := StoredMessage{
+						Encrypted: true,
+						Message:   string(enc),
+						HashedKey: fmt.Sprintf("%x", sha256.Sum256([]byte(randKey))),
+					}
+
+					log.Printf("paylaod -> storage: %v, Hashedkey: %v, Duration: %v\n", newMessage.Message, newMessage.HashedKey, payload.Duration)
+					valueToStore, _ := json.Marshal(newMessage)
+					storeKey, err := saveToStorage(valueToStore, time.Duration(payload.Duration)*time.Second)
+					if err == nil {
+						jResponse.NewLink = "https://" +r.Host + "/v/" + randKey + storeKey
+						jResponse.Status = "ok"
+					} else {
+						log.Println(err)
+					}
+
+				} else {
+					log.Println(err)
+				}
+
+			}
+		} else {
+			log.Println(err)
+		}
+
+	}
+	response, _ = json.Marshal(jResponse)
+	return
+
+}
 func apiSaveSecret(r *http.Request) (responseCode int, response []byte) {
 	responseCode = 200
 
@@ -178,7 +250,7 @@ func apiSaveSecret(r *http.Request) (responseCode int, response []byte) {
 		NewId  string `json:"newId"`
 	}{
 		Status: "error",
-		//NewId:strconv.FormatInt(32, 16)
+		// NewId:strconv.FormatInt(32, 16)
 		NewId: "0",
 	}
 
@@ -200,12 +272,11 @@ func apiSaveSecret(r *http.Request) (responseCode int, response []byte) {
 					HashedKey: payload.HashedKey,
 				}
 
-				if payload.Duration <= 0 || payload.Duration > 86400*30 {
+				if payload.Duration <= 0 || payload.Duration > maxDuration {
 					payload.Duration = defaultDuration
 				}
 
-
-				log.Printf("paylaod -> storage: %v, Hashedkey: %v, Duration: %v\n", payload.SecretMessage, payload.HashedKey, payload.Duration	)
+				log.Printf("paylaod -> storage: %v, Hashedkey: %v, Duration: %v\n", payload.SecretMessage, payload.HashedKey, payload.Duration)
 				valueToStore, _ := json.Marshal(newMessage)
 				storeKey, err := saveToStorage(valueToStore, time.Duration(payload.Duration)*time.Second)
 				if err == nil {
@@ -219,7 +290,7 @@ func apiSaveSecret(r *http.Request) (responseCode int, response []byte) {
 		} else {
 			log.Println(err)
 		}
-		//log.Printf("Got payload: %v\n", payload)
+		// log.Printf("Got payload: %v\n", payload)
 	}
 	response, _ = json.Marshal(jResponse)
 	return
@@ -233,7 +304,7 @@ func apiGetMessage(r *http.Request) (responseCode int, response []byte) {
 		CryptedMessage string `json:"cryptedMessage"`
 	}{
 		Status: "error",
-		//NewId:strconv.FormatInt(32, 16)
+		// NewId:strconv.FormatInt(32, 16)
 		CryptedMessage: "0",
 	}
 
@@ -255,7 +326,7 @@ func apiGetMessage(r *http.Request) (responseCode int, response []byte) {
 					err := json.Unmarshal([]byte(val), &storedMessage)
 					if err == nil {
 
-						if (storedMessage.HashedKey == payload.HashedKey) {
+						if storedMessage.HashedKey == payload.HashedKey {
 							jResponse.Status = "ok"
 							jResponse.CryptedMessage = storedMessage.Message
 
@@ -291,6 +362,8 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	switch apiCall {
 	case "saveSecret":
 		responseCode, response = apiSaveSecret(r)
+	case "unsecSave":
+		responseCode, response = apiUnsecSave(r)
 	case "get":
 		responseCode, response = apiGetMessage(r)
 	default:
