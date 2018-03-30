@@ -222,7 +222,7 @@ func apiUnsecSave(r *http.Request) (responseCode int, response []byte) {
 					valueToStore, _ := json.Marshal(newMessage)
 					storeKey, err := saveToStorage(valueToStore, time.Duration(payload.Duration)*time.Second)
 					if err == nil {
-						jResponse.NewLink = "https://" +r.Host + "/v/" + randKey + storeKey
+						jResponse.NewLink = "/v/" + randKey + storeKey
 						jResponse.Status = "ok"
 					} else {
 						log.Println(err)
