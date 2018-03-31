@@ -5,6 +5,7 @@ let proto = process.env.NODE_ENV === 'development' ? "http:" : "https:";
 export var Constants = {
     randomKeyLen: 12,
     defaultDuration: 7,
+    isDebug: process.env.NODE_ENV === 'development',
     proto: process.env.NODE_ENV === proto,
     apiBaseUrl: process.env.NODE_ENV === 'development' ? proto + "//localhost:8080/api/" : proto +"//"+ arr[2] + "/api/",
 };

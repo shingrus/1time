@@ -18,6 +18,7 @@ export default class ViewSecretMessage extends React.Component {
             secretKey: "",
             needSecretKey: "",
             isWrongKey: false,
+            isNoMessage: false,
         }
     }
 
@@ -33,8 +34,18 @@ export default class ViewSecretMessage extends React.Component {
         this.setState({isLoading: true, isWrongKey: false});
         let _this = this;
 
-        let arr = window.location.href.split("/");
-        let link = arr[4];
+        let arr = window.location.href.split("#");
+        let link = "";
+        if (arr.length ===   2 ) {//we have new type of link
+         link = arr[1]
+        }
+        else {
+            arr = window.location.href.split("/");
+            link = arr[4];
+        }
+
+
+
 
         if (typeof(link) !== "undefined" && link.length > Constants.randomKeyLen) {
 
@@ -78,7 +89,7 @@ export default class ViewSecretMessage extends React.Component {
 
 
         } else {
-            this.setState({isLoading: false});
+            this.setState({isLoading: false, isNoMessage:true});
         }
 
 

@@ -221,7 +221,7 @@ func apiUnsecSave(r *http.Request) (responseCode int, response []byte) {
 					valueToStore, _ := json.Marshal(newMessage)
 					storeKey, err := saveToStorage(valueToStore, time.Duration(payload.Duration)*time.Second)
 					if err == nil {
-						jResponse.NewLink = "/v/" + randKey + storeKey
+						jResponse.NewLink = "/v/#" + randKey + storeKey
 						jResponse.Status = "ok"
 					} else {
 						log.Println(err)
@@ -295,6 +295,13 @@ func apiSaveSecret(r *http.Request) (responseCode int, response []byte) {
 	return
 }
 
+/**
+Good to have this api for everyone
+
+func apiGetRandomPass(r *http.Request) (responseCode int, response []byte) {
+
+}
+ */
 func apiGetMessage(r *http.Request) (responseCode int, response []byte) {
 	responseCode = 200
 

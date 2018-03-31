@@ -15,7 +15,7 @@ export default class ShowNewLink extends Component {
 
             let arr = window.location.href.split("/");
             let host = arr[0] + "//" + arr[2];
-            this.state.newLink = host + "/v/" + props.location.state.randomString + props.location.state.newId;
+            this.state.newLink = host + "/v/#" + props.location.state.randomString + props.location.state.newId;
         }
 
     }
