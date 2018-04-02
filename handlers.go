@@ -179,6 +179,7 @@ curl -X POST -H 'content-type: application/json' 'http://localhost:8080/api/unse
 
 var payload struct {
 		SecretMessage string `json:"secretMessage"`
+		Duration      int    `json:"duration"`
 	}
  */
 func apiUnsecSave(r *http.Request) (responseCode int, response []byte) {
