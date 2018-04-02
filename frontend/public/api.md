@@ -18,8 +18,8 @@
 
   **Content:**
   `{
-        SecretMessage string `json:"secretMessage"`
-        Duration      int    `json:"duration"`
+        SecretMessage strin,
+        Duration      int
    }`
 
 * **Success Response:**
