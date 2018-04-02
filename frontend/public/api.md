@@ -1,4 +1,4 @@
-**Create Link**
+**Create Link Plain data over internet**
 ----
   Creates new link with encrypted message.
 
@@ -17,9 +17,9 @@
 * **Data Params**
 
   **Content:**
-  `{
-        SecretMessage string,
-        Duration      int
+  `{<br>
+        secretMessage string,<br>
+        duration      int<br>
    }`
 
 * **Success Response:**
