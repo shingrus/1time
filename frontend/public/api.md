@@ -8,23 +8,22 @@
 
 * **Method:**
 
-  `POST`, `GET`
+  `POST`
 
 *  **URL Params**
 
   None
 
 * **Data Params**
-
-  **Content:**
-  `{<br>
-        secretMessage string,<br>
-        duration      int<br>
+  **Content:**<br>
+  `{
+        secretMessage string,
+        duration      int
    }`
 
 * **Success Response:**
 
-  * **Code:** 200 <br />
+  * **Code:** 200
     **Content:**
     `{
         status: "ok",
@@ -33,7 +32,7 @@
 
 * **Error Response:**
 
-  * **Code:** 200 <br />
+  * **Code:** 200
     **Content:** `{
         status: "error",
         NewLink: ""
@@ -42,6 +41,6 @@
 * **Sample Call:**
 
   ```shell
-   curl -X POST -H 'content-type: application/json' 'https://1time.it/api/unsecSave' \
-    -d '{"secretMessage":"test Message"}'
+   curl -X POST -H 'content-type: application/json' 'https://1time.it/api/unsecSave' -d \
+   '{"secretMessage":"test Message"}'
   ```
