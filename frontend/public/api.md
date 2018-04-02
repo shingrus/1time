@@ -1,6 +1,6 @@
-**Create Link Plain data over internet**
+**Create Link**
 ----
-  Creates new link with encrypted message.
+  Creates new one-time link with encrypted message.
 
 * **URL**
 
@@ -15,11 +15,15 @@
   None
 
 * **Data Params**
-  **Content:**<br>
+  **Content:**
   `{
         secretMessage string,
         duration      int
    }`
+
+duration  - Seconds to store the secret message. Default is 7 days. Maximum is 30 days(30*86400)
+
+
 
 * **Success Response:**
 
@@ -29,6 +33,7 @@
         status: "ok",
         newLink : "/v/#12345678"
     }`
+To view this message online you should concatenate two strings: "https://1time.it" and value of the newLink parameter. For example: https://1time.it/v/#12345678
 
 * **Error Response:**
 
