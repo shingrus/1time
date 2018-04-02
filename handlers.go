@@ -195,48 +195,52 @@ func apiUnsecSave(r *http.Request) (responseCode int, response []byte) {
 		SecretMessage string `json:"secretMessage"`
 		Duration      int    `json:"duration"`
 	}
-	dec := json.NewDecoder(r.Body)
-	if dec.More() {
-		err := dec.Decode(&payload)
-		if err == nil {
-			if len(payload.SecretMessage) > 0 {
-				// log.Printf("Got payload: %v\n", payload)
+	if r.Method != "POST" { // unsecure for default logging etc
+		jResponse.Status = "Invalid request method."
+	} else {
+		dec := json.NewDecoder(r.Body)
+		if dec.More() {
+			err := dec.Decode(&payload)
+			if err == nil {
+				if len(payload.SecretMessage) > 0 {
+					// log.Printf("Got payload: %v\n", payload)
 
-				randKey := RandStringBytesMaskImprSrc(randKeyLen)
+					randKey := RandStringBytesMaskImprSrc(randKeyLen)
 
-				if payload.Duration <= 0 || payload.Duration > maxDuration {
-					payload.Duration = defaultDuration
-				}
-
-				o := openssl.New()
-
-				enc, err := o.EncryptString(randKey, payload.SecretMessage)
-				if err == nil {
-					newMessage := StoredMessage{
-						Encrypted: true,
-						Message:   string(enc),
-						HashedKey: fmt.Sprintf("%x", sha256.Sum256([]byte(randKey))),
+					if payload.Duration <= 0 || payload.Duration > maxDuration {
+						payload.Duration = defaultDuration
 					}
 
-					log.Printf("paylaod -> storage: %v, Hashedkey: %v, Duration: %v\n", newMessage.Message, newMessage.HashedKey, payload.Duration)
-					valueToStore, _ := json.Marshal(newMessage)
-					storeKey, err := saveToStorage(valueToStore, time.Duration(payload.Duration)*time.Second)
+					o := openssl.New()
+
+					enc, err := o.EncryptString(randKey, payload.SecretMessage)
 					if err == nil {
-						jResponse.NewLink = "/v/#" + randKey + storeKey
-						jResponse.Status = "ok"
+						newMessage := StoredMessage{
+							Encrypted: true,
+							Message:   string(enc),
+							HashedKey: fmt.Sprintf("%x", sha256.Sum256([]byte(randKey))),
+						}
+
+						log.Printf("paylaod -> storage: %v, Hashedkey: %v, Duration: %v\n", newMessage.Message, newMessage.HashedKey, payload.Duration)
+						valueToStore, _ := json.Marshal(newMessage)
+						storeKey, err := saveToStorage(valueToStore, time.Duration(payload.Duration)*time.Second)
+						if err == nil {
+							jResponse.NewLink = "/v/#" + randKey + storeKey
+							jResponse.Status = "ok"
+						} else {
+							log.Println(err)
+						}
+
 					} else {
 						log.Println(err)
 					}
 
-				} else {
-					log.Println(err)
 				}
-
+			} else {
+				log.Println(err)
 			}
-		} else {
-			log.Println(err)
-		}
 
+		}
 	}
 	response, _ = json.Marshal(jResponse)
 	return
@@ -250,7 +254,6 @@ func apiSaveSecret(r *http.Request) (responseCode int, response []byte) {
 		NewId  string `json:"newId"`
 	}{
 		Status: "error",
-		// NewId:strconv.FormatInt(32, 16)
 		NewId: "0",
 	}
 
