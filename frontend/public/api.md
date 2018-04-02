@@ -18,7 +18,7 @@
 
   **Content:**
   `{
-        SecretMessage strin,
+        SecretMessage string,
         Duration      int
    }`
 
@@ -27,7 +27,7 @@
   * **Code:** 200 <br />
     **Content:**
     `{
-        status: "ok"
+        status: "ok",
         newLink : "/v/#12345678"
     }`
 
@@ -36,11 +36,12 @@
   * **Code:** 200 <br />
     **Content:** `{
         status: "error",
-        NewLink; ""
+        NewLink: ""
     }`
 
 * **Sample Call:**
 
   ```shell
-   curl -X POST -H 'content-type: application/json' 'https://1time.it/api/unsecSave' -d '{"secretMessage":"test Message"}'
+   curl -X POST -H 'content-type: application/json' 'https://1time.it/api/unsecSave' \
+    -d '{"secretMessage":"test Message"}'
   ```
