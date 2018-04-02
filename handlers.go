@@ -368,7 +368,6 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	apiCall := r.URL.Path[len("/api/"):]
-	log.Println("Api call: " + apiCall)
 	switch apiCall {
 	case "saveSecret":
 		responseCode, response = apiSaveSecret(r)

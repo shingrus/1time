@@ -33,7 +33,7 @@ duration  - Seconds to store the secret message. Default is 7 days. Maximum is 3
         status: "ok",
         newLink : "/v/#12345678"
     }`
-To view this message online you should concatenate two strings: "https://1time.it" and value of the newLink parameter. For example: https://1time.it/v/#12345678
+To view this message on the site you should concatenate two strings: "https://1time.it" and value of the newLink parameter. For example: https://1time.it/v/#12345678
 
 * **Error Response:**
 
