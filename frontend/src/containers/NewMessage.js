@@ -89,7 +89,7 @@ export default class NewMessage extends Component {
                         <FormControl
                             autoFocus
                             componentClass="textarea"
-                            placeholder="All content will be encrypted with uniq key. We don't have any access to this content on server side!"
+                            placeholder="All content will be encrypted with the uniq key on the client side."
                             rows={4}
                             value={this.state.secretMessage}
                             onChange={this.handleChange}
