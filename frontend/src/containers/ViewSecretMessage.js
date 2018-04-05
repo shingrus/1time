@@ -118,7 +118,7 @@ export default class ViewSecretMessage extends React.Component {
                         <Panel.Heading>
                             <Panel.Title componentClass="h3">One-time message:</Panel.Title>
                         </Panel.Heading>
-                        <Panel.Body>{this.state.secretMessage}</Panel.Body>
+                        <Panel.Body><pre >{this.state.secretMessage}</pre></Panel.Body>
                         <Panel.Heading>
                             <Panel.Title componentClass="h3">
                                 <CopyToClipboard
