@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/go-redis/redis"
-	"time"
 	"log"
 	"os"
 	"strconv"
+	"time"
+
+	"github.com/go-redis/redis"
 )
 
 var redisPassword = os.Getenv("REDISPASS")
@@ -25,7 +26,7 @@ func getRedisClient() *redis.Client {
 store value with global uniq key
 return key string(hexademical number)
 error in case of failure
- */
+*/
 func saveToStorage(value interface{}, duration time.Duration) (newKey string, err error) {
 	client := getRedisClient()
 	val, err := client.Incr(globalIncrementalKey).Result()
@@ -42,8 +43,8 @@ func saveToStorage(value interface{}, duration time.Duration) (newKey string, er
 /*
 function constucts key for messages using format like 'messageKey<XX>'
 where XXXXXX is a hex-number
- */
-func getStoreKey(key string) (string) {
+*/
+func getStoreKey(key string) string {
 	return "messageKey" + key
 }
 

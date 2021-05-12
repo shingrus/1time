@@ -1,14 +1,14 @@
 package main
 
 import (
-	"time"
-	"math/rand"
 	"crypto/aes"
-	"io"
 	"crypto/cipher"
-	"encoding/base64"
 	crand "crypto/rand"
+	"encoding/base64"
 	"fmt"
+	"io"
+	"math/rand"
+	"time"
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
