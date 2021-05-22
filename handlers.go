@@ -1,15 +1,16 @@
 package main
 
 import (
-	"net/http"
-	"html/template"
-	"encoding/json"
-	"log"
-	"time"
-	"strconv"
-	"github.com/Luzifer/go-openssl"
-	"fmt"
 	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"html/template"
+	"log"
+	"net/http"
+	"strconv"
+	"time"
+
+	"github.com/Luzifer/go-openssl"
 )
 
 type StoredMessage struct {
@@ -181,7 +182,7 @@ var payload struct {
 		SecretMessage string `json:"secretMessage"`
 		Duration      int    `json:"duration"`
 	}
- */
+*/
 func apiUnsecSave(r *http.Request) (responseCode int, response []byte) {
 	responseCode = 200
 	jResponse := struct {
@@ -254,7 +255,7 @@ func apiSaveSecret(r *http.Request) (responseCode int, response []byte) {
 		NewId  string `json:"newId"`
 	}{
 		Status: "error",
-		NewId: "0",
+		NewId:  "0",
 	}
 
 	var payload struct {
@@ -305,7 +306,7 @@ Good to have this api for everyone
 func apiGetRandomPass(r *http.Request) (responseCode int, response []byte) {
 
 }
- */
+*/
 func apiGetMessage(r *http.Request) (responseCode int, response []byte) {
 	responseCode = 200
 
